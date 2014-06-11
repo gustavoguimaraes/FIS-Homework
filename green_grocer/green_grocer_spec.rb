@@ -1,7 +1,5 @@
-require 'deli_counter'
+require './green_grocer'
 
-describe "something" do 
-	it "something" do 
-		expect().to eq()
-	end
+describe "this is going to be a method test" do
+	 pending
 end
