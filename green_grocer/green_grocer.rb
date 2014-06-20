@@ -43,18 +43,18 @@ end
 
 class Coupon
   def self.total_number_is(number, coups)
-    coups = []
+    coups_array = []
     number.times do
-      coups << coups.sample
+      coups_array << coups.sample
     end
-    coups
+    coups_array
   end
 end
 
 #Implement a method checkout to calculate total cost of a cart of items and
 #apply discounts and coupons as necessary.
 
-class Total_Cost
+class TotalCost
   attr_reader :cart, :coups
 
   def initialize(cart, coups)
@@ -64,7 +64,7 @@ class Total_Cost
 
   def create_count_elements
     count_items = {}
-      @cart.each do |cart_info|
+      cart.each do |cart_info|
         cart_info.each do |item_name, hash|
           unless count_items[item_name]
             count_items[item_name] = hash
@@ -80,9 +80,10 @@ class Total_Cost
   def apply_coupons
     coupons_applied = []
       create_count_elements.each do |item_hash, value_hash|
-        @coups.each do |item|
+        coups.each_with_index do |item, index|
           if item[:item] == item_hash && item[:num] >= value_hash[:count]
             value_hash[:price] = item[:cost]
+            @coups.delete(index)
           end
         end
       coupons_applied << {item_hash => value_hash}
@@ -94,9 +95,7 @@ class Total_Cost
     total = 0
     apply_coupons.each do |cart_info|
       cart_info.each do |item_name, hash|
-        hash.each do |key, value|
-         total += value if key == :price
-        end
+         total += hash[:price] * hash[:count]
       end
     end
     total
